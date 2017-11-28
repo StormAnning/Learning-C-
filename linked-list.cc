@@ -103,12 +103,30 @@ ListItem<T>* findMthItemToLast(ListItem<T> **head, int m){
 	return itemMBehindCurrent;
 }
 
+template<class T>
+bool isListAcyclic(ListItem<T> **head){
+	ListItem<T>* slow, *fast;
+	slow=*head;
+	fast = *head->getNext();
+	while(true){
+		if(!fast || !fast->getNext()){
+			return true; //fast reached end acyclic
+		}else if(fast == slow || fast->getNext() == slow){
+			return false; // fast passed slow must have looped round
+		}else{
+			slow = slow->getNext();
+			fast = fast->getNext()->getNext();
+		}
+	}
+}
+
 //just for test purposes
 void setUpTestIntList(ListItem<int> **head, int nItems){
 	for(int i=2; i <= nItems; i++){
 		insertAtFront(head, i);
 	}
 }
+
 
 
 int main(int argc, char const *argv[])
