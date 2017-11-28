@@ -84,6 +84,25 @@ bool insertAfterItem(ListItem<T> **head, ListItem<T> *item, const T &data){
 
 }
 
+template<class T>
+ListItem<T>* findMthItemToLast(ListItem<T> **head, int m){
+	ListItem<T>* itemMBehindCurrent = *head;
+	ListItem<T>* current = *head;
+	for(int i=0; i < m; i++){
+		if(current->getNext()){
+			current = current->getNext();
+		}else{
+			return NULL; //case that there is no mth item
+		}
+	}
+
+	while(current){
+		current = current->getNext();
+		itemMBehindCurrent = itemMBehindCurrent->getNext();
+	}
+	return itemMBehindCurrent;
+}
+
 //just for test purposes
 void setUpTestIntList(ListItem<int> **head, int nItems){
 	for(int i=2; i <= nItems; i++){
@@ -101,7 +120,8 @@ int main(int argc, char const *argv[])
 	//deleteAtFront(&head);
 	
 	//deleteItem(&head, head->getNext()->getNext()->getNext());
-	insertAfterItem(&head, head->getNext(), 69);
+	ListItem<int> *fourthFrmLastItem = findMthItemToLast(&head, 4);
+	insertAfterItem(&head, fourthFrmLastItem, 69);
 
 	printList(&head);
 	return 0;
