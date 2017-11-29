@@ -19,6 +19,7 @@ private:
 
 template<class T>
 bool insert(BinaryTree<T> **root, const T& value){
+	if(!*root)return false;
 	BinaryTree<T> *child = new BinaryTree<T>(value);
 	BinaryTree<T> *current = *root;
 	while(current){
@@ -41,6 +42,20 @@ bool insert(BinaryTree<T> **root, const T& value){
 	return false;
 }
 
+template<class T>
+bool find(BinaryTree<T> *root, const T& value){
+	while(root){
+		int current = root->value();
+		if(current == value) break;
+		if(current <= value){
+			root = root->leftChild();
+		}else{
+			root = root->rightChild();
+		}
+	}
+	return root;
+}
+
 void printBST(BinaryTree<int> *root){
 	if(!root) return;
 	printBST(root->leftChild());
@@ -58,6 +73,8 @@ int main(int argc, char const *argv[]){
 	insert(&root, 88);
 	insert(&root, 3);
 	printBST(root); 
+	printf("%d\n", find(root, 35));
+	printf("%d\n", find(root, 3));
 
 	return 0;
 }
