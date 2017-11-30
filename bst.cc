@@ -80,7 +80,7 @@ int findLowestCommonAncestor(BinaryTree<T> *head, const T& value1, const T& valu
 		int currentVal = current->value();
 		if(value1 <= currentVal && value2 <= currentVal){
 			current = current->leftChild();
-		}else if(value1 <= currentVal && value2 <= currentVal){
+		}else if(value1 >= currentVal && value2 >= currentVal){
 			current = current->rightChild();
 		}else{
 			return current->value();
@@ -111,18 +111,19 @@ void printPostOrderBST(BinaryTree<int> *root){
 }
 
 int main(int argc, char const *argv[]){
-	BinaryTree<int> *root = new BinaryTree<int>(50);
-	insert(&root, 30);
-	insert(&root, 20);
-	insert(&root, 40);
-	insert(&root, 70);
-	insert(&root, 60);
-	insert(&root, 80);
+	BinaryTree<int> *root = new BinaryTree<int>(20);
+	insert(&root, 28);
+	insert(&root, 22);
+	insert(&root, 8);
+	insert(&root, 4);
+	insert(&root, 12);
+	insert(&root, 10);
+	insert(&root, 14);
+	insert(&root, 21);
+	insert(&root, 34);
 
-	printBST(root);
-	printf("---------\n");
-	printPreOrderBST(root); 
-
-	//printf("%d\n", findLowestCommonAncestor(root, 4, 12));
+	printBST(root); 
+	printf("%d\n", findLowestCommonAncestor(root, 21, 34));
+	
 	return 0;
 }
