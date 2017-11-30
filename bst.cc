@@ -23,16 +23,16 @@ bool insert(BinaryTree<T> **root, const T& value){
 	BinaryTree<T> *child = new BinaryTree<T>(value);
 	BinaryTree<T> *current = *root;
 	while(current){
-		if(current->value() <= value && current->leftChild()){
+		if(current->value() >= value && current->leftChild()){
 			current = current->leftChild();
-		}else if(current->value() > value && current->rightChild()){
+		}else if(current->value() < value && current->rightChild()){
 			current = current->rightChild();
 		}else{
 			break;
 		}
 	}
 
-	if(current->value() <= value){
+	if(current->value() >= value){
 		current->setLeftChild(child);
 		return true;
 	}else{
@@ -40,6 +40,23 @@ bool insert(BinaryTree<T> **root, const T& value){
 		return true;
 	}
 	return false;
+}
+
+
+template<class T>
+BinaryTree<T>* insertRec(BinaryTree<T> *node, const T& value){
+	if(!node){
+		return new BinaryTree<T>(value);
+	}
+
+	if(node->value() >= value){
+		node->setLeftChild(insertRec(node->leftChild(),value));
+	}
+
+	if(node->value() < value){
+		node->setRightChild(insertRec(node->rightChild(), value));
+	}
+	return node; //return unchanged node pointer
 }
 
 template<class T>
@@ -56,6 +73,22 @@ bool find(BinaryTree<T> *root, const T& value){
 	return root;
 }
 
+template<class T>
+int findLowestCommonAncestor(BinaryTree<T> *head, const T& value1, const T& value2){
+	BinaryTree<T> *current = head;
+	while(current){
+		int currentVal = current->value();
+		if(value1 <= currentVal && value2 <= currentVal){
+			current = current->leftChild();
+		}else if(value1 <= currentVal && value2 <= currentVal){
+			current = current->rightChild();
+		}else{
+			return current->value();
+		}
+	}
+	return 0; // couldn't find lowest common ancestor
+}
+
 void printBST(BinaryTree<int> *root){
 	if(!root) return;
 	printBST(root->leftChild());
@@ -63,18 +96,33 @@ void printBST(BinaryTree<int> *root){
 	printBST(root->rightChild());
 }
 
-int main(int argc, char const *argv[]){
-	BinaryTree<int> *root = new BinaryTree<int>(52);
-	insert(&root, 33);
-	insert(&root, 38);
-	insert(&root, 64);
-	insert(&root, 98);
-	insert(&root, 17);
-	insert(&root, 88);
-	insert(&root, 3);
-	printBST(root); 
-	printf("%d\n", find(root, 35));
-	printf("%d\n", find(root, 3));
+void printPreOrderBST(BinaryTree<int> *root){
+	if(!root) return;
+	printf("%d\n", root->value());
+	printPreOrderBST(root->leftChild());
+	printPreOrderBST(root->rightChild());
+}
 
+void printPostOrderBST(BinaryTree<int> *root){
+	if(!root) return;
+	printPostOrderBST(root->leftChild());
+	printPostOrderBST(root->rightChild());
+	printf("%d\n", root->value());
+}
+
+int main(int argc, char const *argv[]){
+	BinaryTree<int> *root = new BinaryTree<int>(50);
+	insert(&root, 30);
+	insert(&root, 20);
+	insert(&root, 40);
+	insert(&root, 70);
+	insert(&root, 60);
+	insert(&root, 80);
+
+	printBST(root);
+	printf("---------\n");
+	printPreOrderBST(root); 
+
+	//printf("%d\n", findLowestCommonAncestor(root, 4, 12));
 	return 0;
 }
